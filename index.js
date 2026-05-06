@@ -5,16 +5,22 @@ import axios from "axios"
 const start = async () => {
   const { state, saveCreds } = await useMultiFileAuthState("./auth")
   const sock = makeWASocket({
-    auth: state
+    auth: state,
+    printQRInTerminal: false
   })
 
   sock.ev.on("creds.update", saveCreds)
 
   // In QR code ra Logs
-  sock.ev.on("connection.update", ({ qr }) => {
+  sock.ev.on("connection.update", ({ qr, connection }) => {
     if (qr) {
       console.log("QR RECEIVED")
       qrcode.generate(qr, { small: true })
+    }
+
+    if (connection === "close") {
+      console.log("Connection closed, retrying in 3s...")
+      setTimeout(() => start(), 3000)
     }
   })
 
@@ -30,7 +36,6 @@ const start = async () => {
 
     if (!text) return
 
-    // Gửi text sang n8n
     const reply = await axios.post(process.env.N8N_WEBHOOK, {
       from,
       text
