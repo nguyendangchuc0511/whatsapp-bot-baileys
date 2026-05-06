@@ -5,11 +5,18 @@ import axios from "axios"
 const start = async () => {
   const { state, saveCreds } = await useMultiFileAuthState("./auth")
   const sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: true
+    auth: state
   })
 
   sock.ev.on("creds.update", saveCreds)
+
+  // Lấy QR code
+  sock.ev.on("connection.update", ({ qr }) => {
+    if (qr) {
+      console.log("QR RECEIVED")
+      qrcode.generate(qr, { small: true })
+    }
+  })
 
   sock.ev.on("messages.upsert", async ({ messages }) => {
     const msg = messages[0]
