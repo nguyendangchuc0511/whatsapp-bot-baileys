@@ -23,10 +23,14 @@ const start = async () => {
     if (!msg.message || msg.key.fromMe) return
 
     const from = msg.key.remoteJid
-    const text = msg.message.conversation || msg.message.extendedTextMessage?.text
+    const text =
+      msg.message.conversation ||
+      msg.message.extendedTextMessage?.text ||
+      ""
 
     if (!text) return
 
+    // Gửi text sang n8n
     const reply = await axios.post(process.env.N8N_WEBHOOK, {
       from,
       text
