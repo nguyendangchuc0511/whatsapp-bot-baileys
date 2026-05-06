@@ -10,7 +10,7 @@ const start = async () => {
 
   sock.ev.on("creds.update", saveCreds)
 
-  // Lấy QR code
+  // In QR code ra Logs
   sock.ev.on("connection.update", ({ qr }) => {
     if (qr) {
       console.log("QR RECEIVED")
