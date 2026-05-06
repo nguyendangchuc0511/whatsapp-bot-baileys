@@ -1,12 +1,11 @@
-import makeWASocket, { useMultiFileAuthState } from "@whiskeysockets/baileys"
+import { default: makeWASocket, useMultiFileAuthState } from "@whiskeysockets/baileys"
 import qrcode from "qrcode-terminal"
 import axios from "axios"
 
 const start = async () => {
   const { state, saveCreds } = await useMultiFileAuthState("./auth")
   const sock = makeWASocket({
-    auth: state,
-    printQRInTerminal: false
+    auth: state
   })
 
   sock.ev.on("creds.update", saveCreds)
