@@ -1,4 +1,6 @@
-import { default: makeWASocket, useMultiFileAuthState } from "@whiskeysockets/baileys"
+import baileys from "@whiskeysockets/baileys"
+const { default: makeWASocket, useMultiFileAuthState } = baileys
+
 import qrcode from "qrcode-terminal"
 import axios from "axios"
 
